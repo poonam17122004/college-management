@@ -35,7 +35,7 @@ Database: MongoDB
 - Account Creation: Ability for admins to add new students, faculty, and admin accounts
 - Account Details Modification: Ability for admins to modify the details of each account
 - Subject Management: Ability for admins to add/edit subjects
-- Notices Management: Ability for admins to add/edit notices
+- Notices Management: Ability for admins to add/edit notices and all
 
 ## Setup Instructions
 
