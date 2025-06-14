@@ -1,4 +1,5 @@
 const facultyDetails = require("../../models/Faculty/details.model.js")
+const Exam = require('../../models/Other/exam.model');
 
 const getDetails = async (req, res) => {
     try {
@@ -104,4 +105,57 @@ const getCount = async (req, res) => {
     }
 }
 
-module.exports = { getDetails, addDetails, updateDetails, deleteDetails, getCount }
+// Create Exam (Faculty)
+const createExam = async (req, res) => {
+    try {
+        const { name, date, branch, semester, subject, duration } = req.body;
+        
+        // Validate required fields
+        if (!name || !date || !branch || !semester || !subject || !duration) {
+            return res.status(400).json({
+                success: false,
+                message: "All fields (name, date, branch, semester, subject, duration) are required"
+            });
+        }
+
+        // Check if faculty exists (using employeeId from body instead of req.user)
+        const faculty = await facultyDetails.findOne({ employeeId: req.body.employeeId });
+        
+        if (!faculty) {
+            return res.status(404).json({
+                success: false,
+                message: "Faculty not found"
+            });
+        }
+        
+        // Create new exam with faculty ID as createdBy
+        const exam = new Exam({
+            name,
+            date: new Date(date),
+            branch,
+            semester,
+            subject,
+            duration: Number(duration),
+            createdBy: faculty._id
+        });
+        
+        await exam.save();
+        
+        const data = {
+            success: true,
+            message: "Exam created successfully",
+            exam
+        };
+        
+        res.status(201).json(data);
+    } catch (error) {
+        console.error("Error creating exam:", error);
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+            error: error.message
+        });
+    }
+};
+
+module.exports = { getDetails, addDetails, updateDetails, deleteDetails, getCount, createExam }

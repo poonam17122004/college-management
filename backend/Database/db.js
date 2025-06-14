@@ -6,10 +6,10 @@ const connectToMongo = () => {
   mongoose
     .connect(mongoURI, { useNewUrlParser: true })
     .then(() => {
-      console.log("Connected to MongoDB Successfully");
+      console.log("Connected to MySQL Successfully");
     })
     .catch((error) => {
-      console.error("Error connecting to MongoDB", error);
+      console.error("Error connecting to MySQL", error);
     });
 };
 
